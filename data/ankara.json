@@ -1,0 +1,106 @@
+[
+    {
+      "name": "Anıtkabir",
+      "district": "Çankaya",
+      "description": "Türkiye Cumhuriyeti kurucusu Mustafa Kemal Atatürk’ün anıt mezarı ve müze kompleksi.",
+      "tags": ["Tarih", "Müze"],
+      "lat": 39.9250,
+      "lng": 32.8369
+    },
+    {
+      "name": "Anadolu Medeniyetleri Müzesi",
+      "district": "Altındağ",
+      "description": "Anadolu tarihinin Paleolitik çağdan Osmanlı’ya kadar eserleriyle sunulduğu başlıca müze.",
+      "tags": ["Tarih", "Müze"],
+      "lat": 39.928,
+      "lng": 32.854
+    },
+    {
+      "name": "Ankara Kalesi",
+      "district": "Altındağ",
+      "description": "Şehrin en eski yerleşim alanı, tarihî surlar ve manzara noktası.",
+      "tags": ["Tarih", "Doğa"],
+      "lat": 39.945,
+      "lng": 32.864
+    },
+    {
+      "name": "Hamamönü",
+      "district": "Altındağ",
+      "description": "Restore edilmiş Osmanlı dönemi evleri, sanat atölyeleri ve kafeler.",
+      "tags": ["Tarih", "Yemek"],
+      "lat": 39.927,
+      "lng": 32.860
+    },
+    {
+      "name": "Ulucanlar Cezaevi Müzesi",
+      "district": "Altındağ",
+      "description": "Eski cezaevinin müze olarak düzenlenmiş hali.",
+      "tags": ["Tarih", "Müze"],
+      "lat": 39.937,
+      "lng": 32.880
+    },
+    {
+      "name": "ODTÜ Bilim ve Teknoloji Müzesi",
+      "district": "Çankaya",
+      "description": "Bilim ve teknoloji tarihini sergileyen müze.",
+      "tags": ["Müze", "Eğlence"],
+      "lat": 39.945,
+      "lng": 32.743
+    },
+    {
+      "name": "Kuğulu Park",
+      "district": "Çankaya",
+      "description": "Kuğuların olduğu sevimli şehir parkı; Tunalı Hilmi’ye yakın.",
+      "tags": ["Doğa", "Eğlence"],
+      "lat": 39.9059,
+      "lng": 32.8659
+    },
+    {
+      "name": "Seğmenler Parkı",
+      "district": "Çankaya",
+      "description": "Yeşil yürüyüş alanlarıyla şehir içi park.",
+      "tags": ["Doğa"],
+      "lat": 39.906,
+      "lng": 32.861
+    },
+    {
+      "name": "Tunalı Hilmi Caddesi",
+      "district": "Çankaya",
+      "description": "Butikler, kafeler, restoranlar ve kitapçılarla Ankara’nın popüler yaya caddesi.",
+      "tags": ["Alışveriş", "Yemek"],
+      "lat": 39.903,
+      "lng": 32.866
+    },
+    {
+      "name": "Kızılay Meydanı & Çevresi",
+      "district": "Çankaya",
+      "description": "Şehrin merkezi alışveriş, yeme içme ve eğlence alanı.",
+      "tags": ["Alışveriş", "Yemek", "Eğlence"],
+      "lat": 39.920,
+      "lng": 32.854
+    },
+    {
+      "name": "ANKAmall",
+      "district": "Yenimahalle",
+      "description": "Büyük alışveriş merkezi, sinema ve restoran alanları.",
+      "tags": ["Alışveriş", "Eğlence", "Yemek"],
+      "lat": 39.982,
+      "lng": 32.744
+    },
+    {
+      "name": "Karum AVM",
+      "district": "Çankaya",
+      "description": "Butikler ve tasarım mağazalarına sahip AVM.",
+      "tags": ["Alışveriş"],
+      "lat": 39.905,
+      "lng": 32.866
+    },
+    {
+      "name": "Harikalar Diyarı Parkı",
+      "district": "Sincan",
+      "description": "Büyük eğlence ve piknik alanlı park, oyun alanlarıyla aile dostu.",
+      "tags": ["Eğlence", "Doğa"],
+      "lat": 39.999,
+      "lng": 32.616
+    }
+  ]

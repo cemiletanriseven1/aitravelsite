@@ -1,0 +1,194 @@
+[
+    {
+      "name": "Ayasofya Camii",
+      "district": "Fatih",
+      "description": "Bizans’tan Osmanlı’ya uzanan, İstanbul’un en ikonik yapılarından biri.",
+      "tags": ["Tarih", "Müze"],
+      "lat": 41.0086,
+      "lng": 28.9802
+    },
+    {
+      "name": "Topkapı Sarayı",
+      "district": "Fatih",
+      "description": "Osmanlı padişahlarının yaşadığı saray ve müze kompleksi.",
+      "tags": ["Tarih", "Müze"],
+      "lat": 41.0115,
+      "lng": 28.9833
+    },
+    {
+      "name": "Sultanahmet Camii (Mavi Camii)",
+      "district": "Fatih",
+      "description": "Altı minaresi ve mavi çinileriyle ünlü Osmanlı camii.",
+      "tags": ["Tarih"],
+      "lat": 41.0054,
+      "lng": 28.9768
+    },
+    {
+      "name": "Yerebatan Sarnıcı",
+      "district": "Fatih",
+      "description": "Bizans döneminden kalma yer altı su sarnıcı.",
+      "tags": ["Tarih", "Müze"],
+      "lat": 41.0084,
+      "lng": 28.9779
+    },
+    {
+      "name": "Kapalıçarşı",
+      "district": "Fatih",
+      "description": "Dünyanın en eski ve en büyük kapalı çarşılarından biri.",
+      "tags": ["Tarih", "Alışveriş"],
+      "lat": 41.0107,
+      "lng": 28.9681
+    },
+    {
+      "name": "Mısır Çarşısı",
+      "district": "Fatih",
+      "description": "Baharat, lokum ve yöresel ürünlerin satıldığı tarihi çarşı.",
+      "tags": ["Tarih", "Alışveriş", "Yemek"],
+      "lat": 41.0165,
+      "lng": 28.9709
+    },
+    {
+      "name": "Galata Kulesi",
+      "district": "Beyoğlu",
+      "description": "İstanbul manzarasını izleyebileceğin tarihi kule.",
+      "tags": ["Tarih", "Müze"],
+      "lat": 41.0256,
+      "lng": 28.9741
+    },
+    {
+      "name": "Dolmabahçe Sarayı",
+      "district": "Beşiktaş",
+      "description": "Osmanlı’nın son dönem sarayı, Boğaz kıyısında.",
+      "tags": ["Tarih", "Müze"],
+      "lat": 41.0390,
+      "lng": 29.0006
+    },
+    {
+      "name": "İstanbul Arkeoloji Müzeleri",
+      "district": "Fatih",
+      "description": "Antik çağlardan Osmanlı’ya uzanan zengin koleksiyon.",
+      "tags": ["Müze", "Tarih"],
+      "lat": 41.0117,
+      "lng": 28.9814
+    },
+    {
+      "name": "Pera Müzesi",
+      "district": "Beyoğlu",
+      "description": "Sanat sergileri ve Osman Hamdi Bey koleksiyonu.",
+      "tags": ["Müze"],
+      "lat": 41.0329,
+      "lng": 28.9750
+    },
+    {
+      "name": "İstanbul Modern",
+      "district": "Beyoğlu",
+      "description": "Modern ve çağdaş sanat müzesi.",
+      "tags": ["Müze"],
+      "lat": 41.0286,
+      "lng": 28.9840
+    },
+    {
+      "name": "Rahmi M. Koç Müzesi",
+      "district": "Beyoğlu",
+      "description": "Sanayi, ulaşım ve teknoloji temalı müze.",
+      "tags": ["Müze"],
+      "lat": 41.0416,
+      "lng": 28.9498
+    },
+    {
+      "name": "Gülhane Parkı",
+      "district": "Fatih",
+      "description": "Tarihi yarımadada yer alan büyük şehir parkı.",
+      "tags": ["Doğa"],
+      "lat": 41.0132,
+      "lng": 28.9816
+    },
+    {
+      "name": "Yıldız Parkı",
+      "district": "Beşiktaş",
+      "description": "Şehir içinde doğayla baş başa kalabileceğin park.",
+      "tags": ["Doğa"],
+      "lat": 41.0490,
+      "lng": 29.0156
+    },
+    {
+      "name": "Çamlıca Tepesi",
+      "district": "Üsküdar",
+      "description": "İstanbul’un en yüksek noktalarından biri, panoramik manzara.",
+      "tags": ["Doğa"],
+      "lat": 41.0270,
+      "lng": 29.0716
+    },
+    {
+      "name": "Ortaköy Meydanı",
+      "district": "Beşiktaş",
+      "description": "Kumpiri ve Boğaz manzarasıyla ünlü.",
+      "tags": ["Yemek"],
+      "lat": 41.0474,
+      "lng": 29.0276
+    },
+    {
+      "name": "Kadıköy Çarşı",
+      "district": "Kadıköy",
+      "description": "Sokak lezzetleri, kafeler ve balıkçılar.",
+      "tags": ["Yemek", "Alışveriş"],
+      "lat": 40.9908,
+      "lng": 29.0283
+    },
+    {
+      "name": "Karaköy",
+      "district": "Beyoğlu",
+      "description": "Kafeler, restoranlar ve sahil yürüyüşleri.",
+      "tags": ["Yemek"],
+      "lat": 41.0245,
+      "lng": 28.9781
+    },
+    {
+      "name": "İstiklal Caddesi",
+      "district": "Beyoğlu",
+      "description": "Mağazalar, kafeler ve sanat merkezleriyle ünlü cadde.",
+      "tags": ["Alışveriş", "Eğlence"],
+      "lat": 41.0369,
+      "lng": 28.9850
+    },
+    {
+      "name": "Nişantaşı",
+      "district": "Şişli",
+      "description": "Lüks mağazalar ve restoranlar.",
+      "tags": ["Alışveriş", "Yemek"],
+      "lat": 41.0486,
+      "lng": 28.9943
+    },
+    {
+      "name": "Zorlu Center",
+      "district": "Beşiktaş",
+      "description": "Lüks AVM, konser ve etkinlik alanları.",
+      "tags": ["Alışveriş", "Eğlence"],
+      "lat": 41.0667,
+      "lng": 29.0172
+    },
+    {
+      "name": "Miniatürk",
+      "district": "Eyüpsultan",
+      "description": "Türkiye’nin minyatür eserlerinin sergilendiği açık hava müzesi.",
+      "tags": ["Müze", "Eğlence"],
+      "lat": 41.0594,
+      "lng": 28.9497
+    },
+    {
+      "name": "Bağdat Caddesi",
+      "district": "Kadıköy",
+      "description": "Anadolu Yakası’nın en ünlü alışveriş ve sosyal caddesi.",
+      "tags": ["Alışveriş", "Yemek"],
+      "lat": 40.9638,
+      "lng": 29.0636
+    },
+    {
+      "name": "Moda Sahili",
+      "district": "Kadıköy",
+      "description": "Deniz kenarı yürüyüşleri ve gün batımı manzarası.",
+      "tags": ["Doğa", "Eğlence"],
+      "lat": 40.9819,
+      "lng": 29.0236
+    }
+  ]

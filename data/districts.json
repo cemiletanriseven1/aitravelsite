@@ -1,0 +1,16 @@
+{
+    "istanbul": [
+      "Kadıköy",
+      "Üsküdar",
+      "Beşiktaş",
+      "Şişli",
+      "Fatih",
+      "Beyoğlu"
+    ],
+    "ankara": [
+      "Çankaya",
+      "Yenimahalle",
+      "Sincan",
+      "Altındağ"
+    ]
+}
