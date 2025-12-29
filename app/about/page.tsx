@@ -1,4 +1,4 @@
-
+// app/about/page.tsx
 "use client";
 
 import { motion } from 'framer-motion';
@@ -10,16 +10,11 @@ const AboutPage = () => {
     const [visibleSections, setVisibleSections] = useState<Set<number>>(new Set());
 
     const cloudName = "dhafbeuse"; 
-    
-    // Resimlerin tam Cloudinary URL'leri
     const imgStory = `https://res.cloudinary.com/${cloudName}/image/upload/v1/ai-travel-story_rgcsme`;
     const imgVision = `https://res.cloudinary.com/${cloudName}/image/upload/v1/vision-travel_gpytn4`;
-    
-    // Arka plan resimlerini de mevcut ID'lerinle güncelledim
     const bgIstanbul = `https://res.cloudinary.com/${cloudName}/image/upload/v1/istanbul-ayasofya_grvcgi`; 
     const bgWorldMap = `https://res.cloudinary.com/${cloudName}/image/upload/v1/ankara-tarih_nycqou`;
 
-    // Intersection Observer ile scroll animasyonları
     useEffect(() => {
         const observer = new IntersectionObserver(
             (entries) => {
@@ -30,25 +25,13 @@ const AboutPage = () => {
                     }
                 });
             },
-            {
-                root: null,
-                rootMargin: '0px',
-                threshold: 0.3,
-            }
+            { root: null, rootMargin: '0px', threshold: 0.3 }
         );
 
-        sectionRefs.current.forEach((section) => {
-            if (section) {
-                observer.observe(section);
-            }
-        });
+        sectionRefs.current.forEach((section) => { if (section) observer.observe(section); });
 
         return () => {
-            sectionRefs.current.forEach(section => {
-                if (section) {
-                    observer.unobserve(section);
-                }
-            });
+            sectionRefs.current.forEach(section => { if (section) observer.unobserve(section); });
         };
     }, []);
 
@@ -59,15 +42,11 @@ const AboutPage = () => {
 
     const staggerContainer = {
         hidden: {},
-        visible: {
-            transition: {
-                staggerChildren: 0.2,
-            },
-        },
+        visible: { transition: { staggerChildren: 0.2 } },
     };
 
     return (
-        <div className="bg-neutral-950 text-white min-h-screen py-8 pt-24">
+        <div className="min-h-screen py-8 pt-24 transition-colors duration-300">
             <div className="max-w-7xl mx-auto px-6">
 
                 {/* Hero Section */}
@@ -77,10 +56,13 @@ const AboutPage = () => {
                     initial="hidden"
                     animate="visible"
                 >
-                    <h1 className="text-6xl font-extrabold text-white leading-tight mb-4">
-                        <span className="text-orange-500">AI</span> TRAVEL: Seyahatinizi Yeniden Tanımlıyoruz
+                    {/* BAŞLIK: Light -> SİYAH, Dark -> BEYAZ */}
+                    <h1 className="text-6xl font-extrabold text-black dark:text-white leading-tight mb-4">
+                        <span className="text-orange-600 dark:text-orange-500">AI</span> TRAVEL: Seyahatinizi Yeniden Tanımlıyoruz
                     </h1>
-                    <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-8">
+                    
+                    {/* AÇIKLAMA: Light -> SİYAH, Dark -> GRİ */}
+                    <p className="text-xl text-black dark:text-gray-300 max-w-3xl mx-auto mb-8">
                         Yapay zekanın gücüyle, sadece bir tatil değil, kişiselleştirilmiş bir keşif sunuyoruz.
                     </p>
 
@@ -99,15 +81,16 @@ const AboutPage = () => {
                 <motion.section
                     id="section-0"
                     ref={el => sectionRefs.current[0] = el}
-                    className="mb-20 py-10 bg-neutral-900 rounded-3xl shadow-2xl overflow-hidden relative"
+                    className="mb-20 py-10 bg-neutral-100 dark:bg-neutral-900 rounded-3xl shadow-2xl overflow-hidden relative transition-colors"
                     variants={fadeIn}
                     initial="hidden"
                     animate={visibleSections.has(0) ? "visible" : "hidden"}
                 >
                     <div className="absolute inset-0 bg-cover bg-center opacity-10 blur-sm" style={{ backgroundImage: `url(${bgIstanbul})` }}></div>
                     <div className="relative z-10 max-w-3xl mx-auto text-center px-4">
-                        <h2 className="text-5xl font-extrabold text-orange-400 mb-6">Hikayemiz</h2>
-                        <p className="text-md text-gray-200 leading-relaxed mb-6 max-w-2xl mx-auto">
+                        <h2 className="text-5xl font-extrabold text-orange-600 dark:text-orange-400 mb-6">Hikayemiz</h2>
+                        {/* PARAGRAF: Light -> SİYAH, Dark -> GRİ */}
+                        <p className="text-md text-black dark:text-gray-200 leading-relaxed mb-6 max-w-2xl mx-auto">
                             Her seyahat bir hikayedir. Biz de AI TRAVEL olarak, bu hikayeleri sıradanlıktan çıkarıp, unutulmaz maceralara dönüştürmek için yola çıktık. Teknolojinin ve insan merakının kesişim noktasında, size özel anlar yaratma tutkusuyla doğduk. Amacımız, gezginlerin planlama yükünü hafifletirken, her anı dolu dolu yaşamalarını sağlamak.
                         </p>
                         <img
@@ -128,23 +111,26 @@ const AboutPage = () => {
                     animate={visibleSections.has(1) ? "visible" : "hidden"}
                 >
                     <div>
-                        <h2 className="text-5xl font-extrabold text-white mb-6">
-                            <span className="text-orange-500">Vizyonumuz:</span> Herkese Özel Seyahat
+                        {/* BAŞLIK: Light -> SİYAH, Dark -> BEYAZ */}
+                        <h2 className="text-5xl font-extrabold text-black dark:text-white mb-6">
+                            <span className="text-orange-600 dark:text-orange-500">Vizyonumuz:</span> Herkese Özel Seyahat
                         </h2>
-                        <p className="text-lg text-gray-300 leading-relaxed mb-6">
+                        {/* PARAGRAF: Light -> SİYAH, Dark -> GRİ */}
+                        <p className="text-lg text-black dark:text-gray-300 leading-relaxed mb-6">
                             Sıradan turistik rotaların ötesine geçerek, her gezginin ilgi alanlarına, bütçesine ve zamanına en uygun, benzersiz rotalar oluşturmak. Yapay zekanın derin öğrenme yetenekleriyle, herkesin kendi "rüya" seyahatini keşfetmesini sağlamak.
                         </p>
-                        <p className="text-md text-gray-400">
+                        {/* ALT PARAGRAF: Light -> SİYAH, Dark -> GRİ */}
+                        <p className="text-md text-black dark:text-gray-400">
                             Gelecekte seyahat deneyimini kişiselleştirmenin, keşfetmenin ve hatırlamanın en kolay yolu olmak istiyoruz.
                         </p>
                     </div>
-                    <div className="relative h-96 rounded-3xl overflow-hidden shadow-2xl border border-white/10">
+                    <div className="relative h-96 rounded-3xl overflow-hidden shadow-2xl border border-neutral-200 dark:border-white/10">
                         <img
                             src={imgVision}
                             alt="Vision Travel"
                             className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/70 to-transparent"></div>
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
                     </div>
                 </motion.section>
 
@@ -152,31 +138,32 @@ const AboutPage = () => {
                 <motion.section
                     id="section-2"
                     ref={el => sectionRefs.current[2] = el}
-                    className="mb-20 py-16 bg-neutral-900 rounded-3xl shadow-2xl relative"
+                    className="mb-20 py-16 bg-neutral-100 dark:bg-neutral-900 rounded-3xl shadow-2xl relative transition-colors"
                     variants={fadeIn}
                     initial="hidden"
                     animate={visibleSections.has(2) ? "visible" : "hidden"}
                 >
                     <div className="absolute inset-0 bg-cover bg-center opacity-10 blur-sm" style={{ backgroundImage: `url(${bgWorldMap})` }}></div>
                     <div className="relative z-10 max-w-5xl mx-auto text-center">
-                        <h2 className="text-5xl font-extrabold text-orange-400 mb-12">Değerlerimiz</h2>
+                        <h2 className="text-5xl font-extrabold text-orange-600 dark:text-orange-400 mb-12">Değerlerimiz</h2>
                         <motion.div
                             className="grid grid-cols-1 md:grid-cols-3 gap-8"
                             variants={staggerContainer}
                             initial="hidden"
                             animate={visibleSections.has(2) ? "visible" : "hidden"}
                         >
-                            <motion.div variants={fadeIn} className="bg-neutral-800 p-8 rounded-xl border border-white/10 hover:border-orange-500 transition-all shadow-md">
-                                <h3 className="text-3xl font-bold text-white mb-4">Kişiselleştirme</h3>
-                                <p className="text-gray-300">Her gezginin benzersiz olduğunu biliyor, rotalarımızı size özel tasarlıyoruz.</p>
+                            {/* KARTLAR: Başlıklar ve Metinler Light -> SİYAH */}
+                            <motion.div variants={fadeIn} className="bg-white dark:bg-neutral-800 p-8 rounded-xl border border-neutral-200 dark:border-white/10 hover:border-orange-500 transition-all shadow-md">
+                                <h3 className="text-3xl font-bold text-black dark:text-white mb-4">Kişiselleştirme</h3>
+                                <p className="text-black dark:text-gray-300">Her gezginin benzersiz olduğunu biliyor, rotalarımızı size özel tasarlıyoruz.</p>
                             </motion.div>
-                            <motion.div variants={fadeIn} className="bg-neutral-800 p-8 rounded-xl border border-white/10 hover:border-orange-500 transition-all shadow-md">
-                                <h3 className="text-3xl font-bold text-white mb-4">Keşif</h3>
-                                <p className="text-gray-300">Sizi bilinmeyene götüren, heyecan verici ve orijinal deneyimler sunuyoruz.</p>
+                            <motion.div variants={fadeIn} className="bg-white dark:bg-neutral-800 p-8 rounded-xl border border-neutral-200 dark:border-white/10 hover:border-orange-500 transition-all shadow-md">
+                                <h3 className="text-3xl font-bold text-black dark:text-white mb-4">Keşif</h3>
+                                <p className="text-black dark:text-gray-300">Sizi bilinmeyene götüren, heyecan verici ve orijinal deneyimler sunuyoruz.</p>
                             </motion.div>
-                            <motion.div variants={fadeIn} className="bg-neutral-800 p-8 rounded-xl border border-white/10 hover:border-orange-500 transition-all shadow-md">
-                                <h3 className="text-3xl font-bold text-white mb-4">Kullanım Kolaylığı</h3>
-                                <p className="text-gray-300">Karmaşık planlamayı yapay zekaya bırakın, siz sadece anın tadını çıkarın.</p>
+                            <motion.div variants={fadeIn} className="bg-white dark:bg-neutral-800 p-8 rounded-xl border border-neutral-200 dark:border-white/10 hover:border-orange-500 transition-all shadow-md">
+                                <h3 className="text-3xl font-bold text-black dark:text-white mb-4">Kullanım Kolaylığı</h3>
+                                <p className="text-black dark:text-gray-300">Karmaşık planlamayı yapay zekaya bırakın, siz sadece anın tadını çıkarın.</p>
                             </motion.div>
                         </motion.div>
                     </div>
@@ -191,20 +178,22 @@ const AboutPage = () => {
                     initial="hidden"
                     animate={visibleSections.has(3) ? "visible" : "hidden"}
                 >
-                    <h2 className="text-5xl font-extrabold text-white mb-8">Ekibimiz</h2>
-                    <p className="text-lg text-gray-300 max-w-3xl mx-auto">
+                    {/* BAŞLIK: Light -> SİYAH, Dark -> BEYAZ */}
+                    <h2 className="text-5xl font-extrabold text-black dark:text-white mb-8">Ekibimiz</h2>
+                    {/* PARAGRAF: Light -> SİYAH, Dark -> GRİ */}
+                    <p className="text-lg text-black dark:text-gray-300 max-w-3xl mx-auto">
                         Tutkulu gezginler, deneyimli yazılımcılar ve yapay zeka uzmanlarından oluşan ekibimizle, hayallerinizdeki seyahatleri gerçeğe dönüştürüyoruz.
                     </p>
                     <div className="flex justify-center gap-8 mt-10">
                         <motion.div
-                            className="bg-neutral-800 w-32 h-32 rounded-full flex items-center justify-center text-gray-400 text-sm border border-white/10"
+                            className="bg-neutral-100 dark:bg-neutral-800 w-32 h-32 rounded-full flex items-center justify-center text-neutral-500 dark:text-gray-400 text-sm border border-neutral-200 dark:border-white/10"
                             whileHover={{ scale: 1.1, rotate: 5 }}
                             transition={{ type: "spring", stiffness: 400, damping: 10 }}
                         >
                             Geliştirici A
                         </motion.div>
                         <motion.div
-                            className="bg-neutral-800 w-32 h-32 rounded-full flex items-center justify-center text-gray-400 text-sm border border-white/10"
+                            className="bg-neutral-100 dark:bg-neutral-800 w-32 h-32 rounded-full flex items-center justify-center text-neutral-500 dark:text-gray-400 text-sm border border-neutral-200 dark:border-white/10"
                             whileHover={{ scale: 1.1, rotate: -5 }}
                             transition={{ type: "spring", stiffness: 400, damping: 10 }}
                         >

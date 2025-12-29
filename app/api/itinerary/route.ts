@@ -1,106 +1,77 @@
-
 import { NextResponse } from "next/server";
-import { GoogleGenAI } from "@google/genai";
+import Groq from "groq-sdk";
 
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-
-// !!! DEBUG SATIRI: Terminalde anahtarın okunup okunmadığını kontrol edin !!!
-console.log("API Key Durumu:", GEMINI_API_KEY ? "OKUNUYOR (Hata devam ederse: Sunucuyu yeniden başlatın veya anahtarı kontrol edin)" : "OKUNMUYOR - KRİTİK HATA");
-// !!! DEBUG SATIRI BİTİŞ !!!
-
-const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
+const client = new Groq({
+  apiKey: process.env.GROQ_API_KEY!, // ✅ DOĞRU KULLANIM
+});
 
 export async function POST(req: Request) {
-    // YENİ: duration ve startLocation'ı alıyoruz
-    const { city, districts, interests, places, duration, startLocation } = await req.json();
+  try {
+    const { city, duration, startLocation, places } = await req.json();
 
-    if (!places || places.length === 0) {
-        return NextResponse.json({ error: "Rota oluşturulacak mekan bulunamadı." }, { status: 400 });
+    if (!process.env.GROQ_API_KEY) {
+      return NextResponse.json(
+        { error: "API anahtarı eksik" },
+        { status: 500 }
+      );
     }
 
-    // KRİTİK KONTROL: Eğer anahtar okunmuyorsa, detaylı hata mesajı döndür
-    if (!GEMINI_API_KEY) {
-        return NextResponse.json({
-            error: "Yapay Zeka Servisi Hatası: GEMINI_API_KEY ortam değişkeni ayarlanmamış.",
-            details: "Lütfen .env.local dosyanızı kontrol edin ve sunucuyu yeniden başlatın."
-        }, { status: 500 });
+    const placeList = places?.map((p: any) => p.name).join(", ");
+
+    const prompt = `
+Şehir: ${city}
+Süre: ${duration} saat
+Başlangıç noktası: ${startLocation}
+Gezilecek yerler: ${placeList}
+
+Görev:
+Mantıklı bir günlük gezi rotası oluştur.
+
+⚠️ SADECE GEÇERLİ JSON DÖN
+⚠️ Markdown kullanma
+⚠️ Açıklama yazma
+
+JSON formatı:
+{
+  "itinerary": [
+    {
+      "name": "",
+      "suggestedTime": "",
+      "aiNote": "",
+      "lat": 0,
+      "lng": 0,
+      "estimatedDuration": "",
+      "transportation": ""
+    }
+  ],
+  "travelTip": ""
+}
+`;
+
+    const completion = await client.chat.completions.create({
+      model: process.env.GROQ_MODEL!, // ✅ MODEL ZORUNLU
+      messages: [{ role: "user", content: prompt }],
+      temperature: 0.7,
+    });
+
+    const text = completion.choices[0].message.content ?? "";
+
+    // 🛡 JSON güvenliği
+    const start = text.indexOf("{");
+    const end = text.lastIndexOf("}") + 1;
+
+    if (start === -1 || end === -1) {
+      throw new Error("AI geçerli JSON döndürmedi");
     }
 
-    const placeListForAI = places.map((p: any) => ({
-        name: p.name,
-        district: p.district,
-        lat: p.lat,
-        lng: p.lng,
-        tags: p.tags.join(", "),
-        description: p.description,
-    }));
+    const cleanJson = text.slice(start, end);
 
-    // PROMPT KISMI
-    const systemInstruction = `Sen, kullanıcıya özel gezi rotası oluşturan üst düzey bir yapay zeka seyahat asistanısın. Görevin, verilen gezilecek yerler (POI) listesini, aşağıdaki kurallara göre mantıklı ve kronolojik bir gezi planına dönüştürmektir:
-        1. Rota, kullanıcının belirttiği ${duration} saatlik gezi süresini aşmayacak şekilde en uygun ${Math.floor(Number(duration) / 2) || 4} mekanı seçmelidir.
-        2. Başlangıç saati her zaman 09:00'u kabul et.
-        3. İlk durak, kullanıcının "${startLocation}" başlangıç konumuna coğrafi olarak en yakın POI olmalıdır.
-        4. Her mekana ortalama 2 saat ziyaret süresi ayır.
-        5. Mekanları birbirine coğrafi olarak en yakın sıraya koy (verimli rota).
-        6. Her durak için özel bir 'aiNote' (Türkçe) oluştur. Bu not, yerin neden seçildiğini ve kullanıcıya özel ipuçlarını içermeli.
-        7. Her durak için, bir önceki mekandan (veya ilk durak için başlangıç noktasından) nasıl gidileceğine dair **KISA** bir 'transportation' (ulaşım) notu ekle (Örn: "5 dk yürüyüş" veya "Metro ile 3 durak").
-        8. Çıktı formatın SADECE ve SADECE JSON olmalıdır. Başka hiçbir metin, açıklama veya markdown formatı KULLANMA.
-
-        Kullanıcı Bilgisi:
-        Şehir: ${city}, Gezi Süresi: ${duration} saat, Başlangıç Konumu: ${startLocation}, İlgilenilen Bölgeler: ${districts.join(", ")}
-
-        POI Listesi: ${JSON.stringify(placeListForAI)}
-        
-        İstenen Çıktı JSON Formatı:
-        {
-            "itinerary": [
-                {
-                    "name": "[POI Adı]",
-                    "suggestedTime": "[hh:mm formatında ziyaret başlangıç saati]",
-                    "aiNote": "[Kişiye özel, Türkçe not]",
-                    "lat": [lat],
-                    "lng": [lng],
-                    "estimatedDuration": "[ör: 2 saat]",
-                    "transportation": "[Önceki noktadan ulaşım notu]" // YENİ ALAN
-                }
-            ],
-            "travelTip": "[Bu gezi için şehirle ilgili genel, kısa bir Türkçe ipucu]"
-        }
-    `;
-
-    try {
-        const response = await ai.models.generateContent({
-            model: "gemini-2.5-flash",
-            contents: "Yukarıdaki talimatlara göre gezi planını oluştur ve SADECE JSON çıktısını ver.",
-            config: {
-                systemInstruction: systemInstruction,
-                responseMimeType: "application/json",
-            }
-        });
-
-        const jsonText = response.text.trim();
-        const result = JSON.parse(jsonText);
-
-        return NextResponse.json(result);
-    } catch (error) {
-        // Hata yakalama bloğu
-        console.error("AI API İstek Hatası:", error);
-
-        let errorMessage = "Bilinmeyen bir hata oluştu.";
-        if (error instanceof Error) {
-            errorMessage = error.message;
-        } else if (typeof error === 'object' && error !== null && 'toString' in error) {
-            errorMessage = error.toString();
-        }
-
-        // Anahtar hatası veya API kota hatasını spesifik yakalama
-        if (errorMessage.includes("API key not valid") || errorMessage.includes("API_KEY_INVALID")) {
-            errorMessage = "Gemini API Anahtarınız geçersiz veya eksik. Lütfen .env.local dosyanızı kontrol edin.";
-        }
-
-        return NextResponse.json({
-            error: "Rota oluşturulurken kritik bir AI hatası oluştu.",
-            details: errorMessage
-        }, { status: 500 });
-    }
+    return NextResponse.json(JSON.parse(cleanJson));
+  } catch (error: any) {
+    console.error("Groq Error:", error);
+    return NextResponse.json(
+      { error: "AI rota oluşturamadı." },
+      { status: 500 }
+    );
+  }
 }

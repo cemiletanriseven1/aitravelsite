@@ -1,151 +1,158 @@
-
 "use client";
+import { useEffect, useState, Suspense, useRef } from 'react';
+import { useSearchParams } from 'next/navigation';
 
-import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
-import dynamic from 'next/dynamic';
-import PlaceCard from "@/components/PlaceCard";
-import { MapPin, Sparkles, Clock, Map, Train } from "lucide-react"; // Train ikonu eklendi
-import { motion } from "framer-motion";
-
-// Harita bileşeni dinamik yükleme
-const MapView = dynamic(() => import('@/components/MapView'), {
-    ssr: false,
-    loading: () => (
-        <div className="flex justify-center items-center bg-neutral-900/50 h-96 rounded-lg text-gray-500">
-            Harita Yükleniyor...
-        </div>
-    ),
-});
-
-
-export default function ResultsPage() {
-    const params = useSearchParams();
-    const city = params.get("city") || "";
-    // YENİ: districts, duration ve startLocation'ı alıyoruz
-    const districts = (params.get("districts") || "").split(",").filter(Boolean);
-    const interests = (params.get("interests") || "").split(",").filter(Boolean);
-    const duration = params.get("duration") || "8";
-    const startLocation = params.get("startLocation") || "Şehir Merkezi";
-
-    const [itinerary, setItinerary] = useState<any[]>([]);
-    const [travelTip, setTravelTip] = useState("");
+function ResultsContent() {
+    const searchParams = useSearchParams();
     const [loading, setLoading] = useState(true);
+    const [itinerary, setItinerary] = useState<any>(null);
     const [error, setError] = useState<string | null>(null);
+    const hasFetched = useRef(false);
 
     useEffect(() => {
-        if (!city || districts.length === 0) return;
-        setLoading(true);
-        setError(null);
+        const generatePlan = async () => {
+            if (hasFetched.current) return;
 
-        // 1. POI Listesini Çek (Artık çoklu ilçe gönderiyoruz)
-        const fetchPoisUrl = `/api/pois?city=${city.toLowerCase()}&districts=${encodeURIComponent(districts.join(","))}&interests=${encodeURIComponent(interests.join(","))}`;
+            const city = searchParams.get('city');
+            const districts = searchParams.get('districts');
+            const interests = searchParams.get('interests');
+            const duration = searchParams.get('duration');
+            const startLocation = searchParams.get('startLocation');
 
-        fetch(fetchPoisUrl)
-            .then((r) => r.json())
-            .then((data) => {
-                if (!data || data.message || data.length === 0) {
-                    setError("Seçtiğiniz bölgelerde ve ilgi alanlarında uygun mekan bulunamadı. Lütfen filtreleri değiştirin.");
-                    setLoading(false);
-                    return null;
-                }
+            if (!city || !duration) {
+                setError("Eksik bilgi! Lütfen arama formunu tam doldurun.");
+                setLoading(false);
+                return;
+            }
 
-                // 2. AI Rota Oluşturma API'sini Çağır (Yeni parametreler dahil)
-                return fetch("/api/itinerary", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        city, districts, interests, places: data, duration, startLocation
-                    }),
+            // --- KOTA DOSTU: ÖNBELLEK KONTROLÜ ---
+            const cacheKey = `plan_${city}_${districts}_${duration}_${startLocation}`;
+            const cachedData = localStorage.getItem(cacheKey);
+
+            if (cachedData) {
+                console.log("Önbellekten veri çekildi 🚀");
+                setItinerary(JSON.parse(cachedData));
+                setLoading(false);
+                hasFetched.current = true;
+                return;
+            }
+            // ------------------------------------
+
+            try {
+                setLoading(true);
+                setError(null);
+                hasFetched.current = true;
+
+                // 1. Mekanları Getir
+                const poisRes = await fetch(`/api/pois?city=${city}&districts=${districts}&interests=${interests}`);
+                if (!poisRes.ok) throw new Error("Mekanlar listesi alınamadı.");
+                const places = await poisRes.json();
+
+                if (places.length === 0) throw new Error("Seçtiğin kriterlere uygun mekan bulunamadı.");
+
+                // 2. AI Rota Oluştur
+                const aiRes = await fetch('/api/itinerary', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ city, places, duration, startLocation }),
                 });
-            })
-            .then(r => r ? r.json() : null)
-            .then((aiResponse) => {
-                if (aiResponse && aiResponse.itinerary) {
-                    setItinerary(aiResponse.itinerary);
-                    setTravelTip(aiResponse.travelTip || "");
-                } else if (aiResponse && aiResponse.error) {
-                    setError(`Rota oluşturulamadı: ${aiResponse.error}. Detay: ${aiResponse.details}`);
+                
+                const finalData = await aiRes.json();
+                
+                if (!aiRes.ok || finalData.error) {
+                    throw new Error(finalData.error || "Rota oluşturulamadı.");
                 }
-                setLoading(false);
-            })
-            .catch((e) => {
-                console.error("Fetch Error:", e);
-                setError("Beklenmedik bir sunucu hatası oluştu.");
-                setLoading(false);
-            });
-    }, [city, districts.join(","), interests.join(","), duration, startLocation]);
 
-    const routePoints = itinerary;
+                // --- VERİYİ ÖNBELLEĞE KAYDET ---
+                localStorage.setItem(cacheKey, JSON.stringify(finalData));
+                // -------------------------------
+
+                setItinerary(finalData);
+            } catch (err: any) {
+                setError(err.message);
+                hasFetched.current = false; // Hata durumunda tekrar denemeye izin ver
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        generatePlan();
+    }, [searchParams]);
+
+    if (loading) return (
+        <div className="min-h-screen bg-black flex flex-col items-center justify-center text-white p-6 text-center">
+            <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-orange-500 mb-6"></div>
+            <p className="text-xl font-bold animate-pulse tracking-tighter uppercase">Yapay Zeka Rotanı Çiziyor...</p>
+            <p className="text-gray-500 text-sm mt-2">Bu işlem Google AI yoğunluğuna göre 15sn sürebilir.</p>
+        </div>
+    );
+
+    if (error) return (
+        <div className="min-h-screen bg-black flex flex-col items-center justify-center text-white p-6 text-center">
+            <div className="bg-red-500/10 border border-red-500/50 p-8 rounded-[32px] max-w-md shadow-2xl shadow-red-500/5">
+                <h2 className="text-3xl font-black text-red-500 mb-4 tracking-tighter uppercase italic">Bir Sorun Oluştu</h2>
+                <p className="text-gray-400 mb-8 leading-relaxed font-medium">{error}</p>
+                <button 
+                    onClick={() => {
+                        hasFetched.current = false;
+                        window.location.reload();
+                    }} 
+                    className="w-full bg-white text-black px-8 py-4 rounded-2xl font-black uppercase tracking-widest hover:bg-orange-500 transition-all active:scale-95"
+                >
+                    Tekrar Dene
+                </button>
+            </div>
+        </div>
+    );
 
     return (
-        <div className="max-w-6xl mx-auto px-4 py-8 pt-24">
-            <h1 className="text-4xl font-black mb-2 text-white">
-                <span className="text-orange-500">{city}</span> Rota Planı
+        <div className="min-h-screen bg-black text-white p-8 pt-32 max-w-4xl mx-auto">
+            <h1 className="text-5xl font-black mb-12 text-white uppercase tracking-tighter">
+                Senin <span className="text-orange-500 italic">Rotan</span>
             </h1>
-
-            {/* Rota Özeti */}
-            <p className="text-gray-400 text-lg mb-8 space-y-1">
-                <span className="flex items-center gap-2">
-                    <MapPin size={18} className="text-orange-500" />
-                    Bölgeler: {districts.join(", ")}
-                </span>
-                <span className="flex items-center gap-2">
-                    <Clock size={18} className="text-orange-500" />
-                    Süre: {duration} Saat
-                </span>
-                <span className="flex items-center gap-2">
-                    <Map size={18} className="text-orange-500" />
-                    Başlangıç: {startLocation}
-                </span>
-            </p>
-
-            {/* Hata ve Yüklenme Durumları */}
-            {loading && (
-                <div className="text-center py-20">
-                    <Sparkles className="animate-spin h-8 w-8 text-orange-500 mx-auto mb-4" />
-                    <p className="text-lg text-orange-400">Yapay Zeka Mükemmel Rotanızı Hesaplıyor...</p>
-                </div>
-            )}
-
-            {error && <div className="bg-red-900/30 border border-red-700 text-red-300 p-4 rounded-lg break-words">{error}</div>}
-
-            {itinerary.length > 0 && !loading && (
-                <div className="grid lg:grid-cols-3 gap-8">
-                    {/* Harita - Sol Kısım */}
-                    <motion.div
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.6 }}
-                        className="lg:col-span-2 order-1"
-                    >
-                        <MapView places={routePoints} route={routePoints} />
-
-                        {travelTip && (
-                            <div className="mt-6 bg-orange-500/10 border-l-4 border-orange-500 p-4 rounded-lg text-sm text-gray-300">
-                                <p className="font-bold text-orange-400 mb-1 flex items-center gap-2"><Sparkles size={16} />AI Seyahat İpucu:</p>
-                                {travelTip}
+            
+            <div className="relative border-l-2 border-orange-500/30 ml-4 pl-8 space-y-12">
+                {itinerary?.itinerary?.map((item: any, index: number) => (
+                    <div key={index} className="relative group">
+                        {/* Zaman Baloncuğu */}
+                        <div className="absolute -left-[45px] top-0 w-8 h-8 bg-black border-2 border-orange-500 rounded-full flex items-center justify-center z-10 group-hover:bg-orange-500 transition-colors">
+                            <div className="w-2 h-2 bg-orange-500 rounded-full group-hover:bg-white" />
+                        </div>
+                        
+                        <div className="bg-neutral-900/50 backdrop-blur-xl border border-white/5 p-8 rounded-[24px] group-hover:border-orange-500/40 transition-all duration-500">
+                            <div className="flex justify-between items-start mb-4">
+                                <span className="text-orange-500 font-black text-3xl tracking-tighter">{item.suggestedTime}</span>
+                                <span className="text-[10px] font-bold bg-white/5 border border-white/10 px-4 py-1 rounded-full text-gray-400 uppercase tracking-widest">{item.estimatedDuration}</span>
                             </div>
-                        )}
-                    </motion.div>
-
-                    {/* Rota Listesi - Sağ Kısım */}
-                    <div className="lg:col-span-1 space-y-4 order-2">
-                        {itinerary.map((p: any, idx: number) => (
-                            <PlaceCard
-                                key={idx}
-                                place={p}
-                                order={idx + 1}
-                                suggestedTime={p.suggestedTime}
-                                aiNote={p.aiNote}
-                                estimatedDuration={p.estimatedDuration}
-                                // YENİ: Ulaşım bilgisini prop olarak iletiyoruz
-                                transportation={p.transportation}
-                            />
-                        ))}
+                            <h3 className="text-2xl font-black mb-3 text-white tracking-tight">{item.name}</h3>
+                            <p className="text-gray-400 text-base mb-6 leading-relaxed italic">"{item.aiNote}"</p>
+                            <div className="inline-flex items-center gap-2 text-[11px] text-white font-black uppercase tracking-widest bg-orange-500 px-4 py-2 rounded-xl shadow-lg shadow-orange-500/20">
+                                🚀 {item.transportation}
+                            </div>
+                        </div>
                     </div>
+                ))}
+            </div>
+
+            {itinerary?.travelTip && (
+                <div className="mt-16 p-8 bg-orange-500/5 border border-orange-500/20 rounded-[32px] relative overflow-hidden group">
+                    <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:scale-110 transition-transform">
+                        <span className="text-6xl text-orange-500 font-black">?</span>
+                    </div>
+                    <h4 className="text-orange-500 font-black uppercase tracking-widest text-xs mb-3">Asistanın Notu</h4>
+                    <p className="text-orange-100/80 text-lg leading-relaxed font-medium italic relative z-10">
+                        {itinerary.travelTip}
+                    </p>
                 </div>
             )}
         </div>
+    );
+}
+
+export default function ResultsPage() {
+    return (
+        <Suspense fallback={<div className="bg-black min-h-screen" />}>
+            <ResultsContent />
+        </Suspense>
     );
 }

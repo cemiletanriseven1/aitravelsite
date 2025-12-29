@@ -1,6 +1,7 @@
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { ThemeProvider } from "@/components/ThemeProvider";
 
 export const metadata = {
   title: "AI Travel Assistant",
@@ -9,11 +10,21 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="tr">
-      <body className="bg-black text-white">
-        <Header />
-        <main className="max-w-6xl mx-auto px-4 py-8">{children}</main>
-        <Footer />
+    <html lang="tr" suppressHydrationWarning>
+      {/* BURADAKİ RENK KODLARINI SİLDİK, CSS'E BIRAKTIK */}
+      <body className="antialiased transition-colors duration-300">
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <Header />
+          <main className="min-h-screen relative">
+            {children}
+          </main>
+          <Footer />
+        </ThemeProvider>
       </body>
     </html>
   );
