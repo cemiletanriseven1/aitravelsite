@@ -54,8 +54,7 @@ export default function HomePage() {
   };
 
   return (
-    <div className="relative min-h-screen overflow-hidden pt-24 pb-12 bg-black text-white">
-      
+  <div className="relative min-h-screen overflow-hidden pt-24 pb-12 bg-background text-foreground"> 
       {/* Arka plan efekti */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-orange-500/10 blur-[120px] rounded-full pointer-events-none" />
 
@@ -70,9 +69,10 @@ export default function HomePage() {
             <Sparkles size={14} /> Yapay Zeka Seyahat Asistanı
           </span>
           
-          <h2 className="text-6xl md:text-7xl font-black text-white leading-[1.1] mb-6">
-            Şehri <br /> <span className="text-orange-500 tracking-tighter uppercase italic">Akıllıca</span> Keşfet.
-          </h2>
+          <h2 className="text-6xl md:text-7xl font-black text-foreground leading-[1.1] mb-6">
+  Şehri <br /> <span className="text-orange-500 tracking-tighter uppercase italic">Akıllıca</span> Keşfet.
+</h2>
+
           
           <p className="text-gray-400 text-lg max-w-md leading-relaxed">
             Saniyeler içinde sana özel rota. Zamanını planlamaya değil, gezmeye ayır.

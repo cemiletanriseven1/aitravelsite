@@ -11,18 +11,14 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="tr" suppressHydrationWarning>
-      {/* BURADAKİ RENK KODLARINI SİLDİK, CSS'E BIRAKTIK */}
-      <body className="antialiased transition-colors duration-300">
+      <body className="min-h-screen antialiased bg-background transition-colors duration-300">
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
-          disableTransitionOnChange
         >
           <Header />
-          <main className="min-h-screen relative">
-            {children}
-          </main>
+          <main className="relative min-h-screen">{children}</main>
           <Footer />
         </ThemeProvider>
       </body>

@@ -46,7 +46,8 @@ const AboutPage = () => {
     };
 
     return (
-        <div className="min-h-screen py-8 pt-24 transition-colors duration-300">
+  <div className="min-h-screen py-8 pt-24 bg-background text-foreground transition-colors duration-300">
+
             <div className="max-w-7xl mx-auto px-6">
 
                 {/* Hero Section */}
@@ -57,14 +58,17 @@ const AboutPage = () => {
                     animate="visible"
                 >
                     {/* BAŞLIK: Light -> SİYAH, Dark -> BEYAZ */}
-                    <h1 className="text-6xl font-extrabold text-black dark:text-white leading-tight mb-4">
-                        <span className="text-orange-600 dark:text-orange-500">AI</span> TRAVEL: Seyahatinizi Yeniden Tanımlıyoruz
-                    </h1>
+                    <h1 className="text-6xl font-extrabold text-foreground leading-tight mb-4">
+  <span className="text-orange-600 dark:text-orange-500">AI</span> TRAVEL: Seyahatinizi Yeniden Tanımlıyoruz
+</h1>
+
                     
                     {/* AÇIKLAMA: Light -> SİYAH, Dark -> GRİ */}
-                    <p className="text-xl text-black dark:text-gray-300 max-w-3xl mx-auto mb-8">
-                        Yapay zekanın gücüyle, sadece bir tatil değil, kişiselleştirilmiş bir keşif sunuyoruz.
-                    </p>
+                    <p className="text-xl text-neutral-700 dark:text-neutral-300 max-w-3xl mx-auto mb-8">
+
+  Yapay zekanın gücüyle, sadece bir tatil değil, kişiselleştirilmiş bir keşif sunuyoruz.
+</p>
+
 
                     <Link href="/" passHref>
                         <motion.button
@@ -112,15 +116,16 @@ const AboutPage = () => {
                 >
                     <div>
                         {/* BAŞLIK: Light -> SİYAH, Dark -> BEYAZ */}
-                        <h2 className="text-5xl font-extrabold text-black dark:text-white mb-6">
-                            <span className="text-orange-600 dark:text-orange-500">Vizyonumuz:</span> Herkese Özel Seyahat
-                        </h2>
+                        <h2 className="text-5xl font-extrabold text-foreground mb-6">
+  <span className="text-orange-600 dark:text-orange-500">Vizyonumuz:</span> Herkese Özel Seyahat
+</h2>
+
                         {/* PARAGRAF: Light -> SİYAH, Dark -> GRİ */}
-                        <p className="text-lg text-black dark:text-gray-300 leading-relaxed mb-6">
+                        <p className="text-lg text-foreground/80 leading-relaxed mb-6">
                             Sıradan turistik rotaların ötesine geçerek, her gezginin ilgi alanlarına, bütçesine ve zamanına en uygun, benzersiz rotalar oluşturmak. Yapay zekanın derin öğrenme yetenekleriyle, herkesin kendi "rüya" seyahatini keşfetmesini sağlamak.
                         </p>
                         {/* ALT PARAGRAF: Light -> SİYAH, Dark -> GRİ */}
-                        <p className="text-md text-black dark:text-gray-400">
+                        <p className="text-md text-foreground/70">
                             Gelecekte seyahat deneyimini kişiselleştirmenin, keşfetmenin ve hatırlamanın en kolay yolu olmak istiyoruz.
                         </p>
                     </div>
@@ -179,9 +184,10 @@ const AboutPage = () => {
                     animate={visibleSections.has(3) ? "visible" : "hidden"}
                 >
                     {/* BAŞLIK: Light -> SİYAH, Dark -> BEYAZ */}
-                    <h2 className="text-5xl font-extrabold text-black dark:text-white mb-8">Ekibimiz</h2>
+                    <h2 className="text-5xl font-extrabold text-foreground mb-8">Ekibimiz</h2>
+
                     {/* PARAGRAF: Light -> SİYAH, Dark -> GRİ */}
-                    <p className="text-lg text-black dark:text-gray-300 max-w-3xl mx-auto">
+                    <p className="text-lg text-foreground/80 max-w-3xl mx-auto">
                         Tutkulu gezginler, deneyimli yazılımcılar ve yapay zeka uzmanlarından oluşan ekibimizle, hayallerinizdeki seyahatleri gerçeğe dönüştürüyoruz.
                     </p>
                     <div className="flex justify-center gap-8 mt-10">

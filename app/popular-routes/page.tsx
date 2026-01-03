@@ -30,9 +30,14 @@ const PopularRouteCard = ({ route }: { route: any }) => {
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 />
                 {/* Etiket Rengi: Siyah yazı */}
-                <div className="absolute top-2 right-2 bg-orange-500 text-black font-black px-2 py-0.5 rounded-md z-10 text-[10px]">
-                   POPÜLER
-                </div>
+                <h1 className="text-5xl font-black text-black dark:text-white mb-3 flex items-center gap-3 italic uppercase tracking-tighter">
+  <Star size={36} className="text-orange-500 fill-orange-500" />
+  Popüler <span className="text-orange-500">Rotalar</span>
+</h1>
+
+
+
+
             </div>
 
             <span className="text-xs font-bold text-orange-500 uppercase tracking-widest flex items-center gap-1 mb-2">
@@ -40,7 +45,8 @@ const PopularRouteCard = ({ route }: { route: any }) => {
             </span>
 
             {/* Başlık Rengi: Light:Siyah / Dark:Beyaz */}
-            <h4 className="text-xl font-black text-black dark:text-white mb-2 leading-tight group-hover:text-orange-400 transition-colors">
+            <h4 className="text-xl font-black text-neutral-900 dark:text-neutral-100 mb-2 leading-tight group-hover:text-orange-400 transition-colors">
+
                 {route.title}
             </h4>
 
@@ -71,21 +77,32 @@ export default function PopularRoutesPage() {
     const ankaraRoutes = popularRoutes.filter(r => r.city === 'Ankara');
 
     return (
-        <div className="max-w-7xl mx-auto px-6 py-8 pt-24 min-h-screen bg-white dark:bg-black transition-colors duration-300">
+        <div className="max-w-7xl mx-auto px-6 py-8 pt-24 min-h-screen bg-background transition-colors duration-300">
+
+
             {/* GENEL SAYFA BAŞLIKLARI */}
-            <h1 className="text-5xl font-black text-black dark:text-white mb-3 flex items-center gap-3 italic uppercase tracking-tighter">
+            <h1 className="text-5xl font-black text-neutral-950 dark:text-neutral-100 mb-3 flex items-center gap-3 italic uppercase tracking-tighter">
+
                 <Star size={36} className="text-orange-500 fill-orange-500" />
                 Popüler <span className="text-orange-500">Rotalar</span>
             </h1>
             
-            <p className="text-black dark:text-gray-400 text-lg mb-12 max-w-2xl">
+            <p className="text-neutral-700 dark:text-neutral-400 text-lg mb-12 max-w-2xl">
+
                 Yapay zeka asistanımız tarafından en çok önerilen rotalar.
             </p>
 
             <section className="mb-20">
-                <h2 className="text-3xl font-black text-black dark:text-white mb-8 border-b border-orange-500/50 pb-2 flex items-center gap-3 uppercase italic">
-                    <Map size={24} className="text-orange-500" /> İstanbul'un Ruhu
-                </h2>
+                <h2 className="text-3xl font-black text-neutral-950 dark:text-neutral-100 mb-8 border-b border-orange-500/50 pb-2 flex items-center gap-3 uppercase italic">
+
+  <Map size={24} className="text-orange-500" /> İstanbul'un Ruhu
+</h2>
+
+
+
+
+
+
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {istanbulRoutes.map(route => (
                         <PopularRouteCard key={route.id} route={route} />
@@ -94,9 +111,13 @@ export default function PopularRoutesPage() {
             </section>
 
             <section>
-                <h2 className="text-3xl font-black text-black dark:text-white mb-8 border-b border-orange-500/50 pb-2 flex items-center gap-3 uppercase italic">
-                    <Map size={24} className="text-orange-500" /> Ankara'nın Kalbi
-                </h2>
+                <h2 className="text-3xl font-black text-neutral-950 dark:text-neutral-100 mb-8 border-b border-orange-500/50 pb-2 flex items-center gap-3 uppercase italic">
+
+  <Map size={24} className="text-orange-500" /> Ankara'nın Kalbi
+</h2>
+
+
+
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {ankaraRoutes.map(route => (
                         <PopularRouteCard key={route.id} route={route} />

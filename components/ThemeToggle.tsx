@@ -5,19 +5,21 @@ import { useEffect, useState } from "react";
 import { Sun, Moon } from "lucide-react";
 
 export const ThemeToggle = () => {
+  const { resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
-  const { theme, setTheme } = useTheme();
 
   useEffect(() => setMounted(true), []);
   if (!mounted) return null;
 
+  const isDark = resolvedTheme === "dark";
+
   return (
     <button
-      onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+      onClick={() => setTheme(isDark ? "light" : "dark")}
       className="p-2 rounded-full bg-neutral-100 dark:bg-neutral-800 hover:ring-2 ring-orange-500 transition-all shadow-sm"
       aria-label="Temayı Değiştir"
     >
-      {theme === "dark" ? (
+      {isDark ? (
         <Sun className="text-orange-500 w-5 h-5" />
       ) : (
         <Moon className="text-neutral-700 w-5 h-5" />
