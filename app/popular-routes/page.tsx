@@ -2,22 +2,64 @@
 import { CldImage } from 'next-cloudinary';
 import popularRoutes from '@/data/popularRoutes.json';
 import Link from 'next/link';
-import { Map, Clock, Star, MapPin } from 'lucide-react';
+import { Map, Clock, Star, MapPin, Heart } from 'lucide-react'; 
+import { useState, useEffect } from 'react';
 
 const PopularRouteCard = ({ route }: { route: any }) => {
+    const [isSaved, setIsSaved] = useState(false);
+
     const params = new URLSearchParams({
         city: route.city.toLowerCase(),
         districts: route.districts.join(','),
         interests: route.interests.join(','),
-        duration: route.duration,
-        startLocation: route.startLocation
+        duration: route.duration.toString(),
+        startLocation: route.startLocation || ""
     });
+
+    useEffect(() => {
+        const currentSaved = JSON.parse(localStorage.getItem("saved_routes") || "[]");
+        const alreadyExists = currentSaved.some((r: any) => r.id === route.id);
+        setIsSaved(alreadyExists);
+    }, [route.id]);
+
+    const handleSave = (e: React.MouseEvent) => {
+        e.preventDefault(); 
+        e.stopPropagation();
+
+        const userName = localStorage.getItem("userName");
+        if (!userName) {
+            alert("Kaydetmek için giriş yapmalısın!");
+            return;
+        }
+
+        const currentSaved = JSON.parse(localStorage.getItem("saved_routes") || "[]");
+        const alreadyExists = currentSaved.some((r: any) => r.id === route.id);
+
+        if (!alreadyExists) {
+            const newSave = {
+                id: route.id,
+                title: route.title,
+                description: route.description,
+                date: "Popüler Rota",
+                type: "popular", 
+                targetUrl: "/popular-routes" // ✅ POPÜLER SAYFASINA GİTSİN
+            };
+            
+            localStorage.setItem("saved_routes", JSON.stringify([...currentSaved, newSave]));
+            setIsSaved(true);
+            alert("Popüler rota kaydedildi!");
+        } else {
+            const updatedSaved = currentSaved.filter((r: any) => r.id !== route.id);
+            localStorage.setItem("saved_routes", JSON.stringify(updatedSaved));
+            setIsSaved(false);
+            alert("Rota listenizden kaldırıldı.");
+        }
+    };
 
     return (
         <Link
             href={`/results?${params.toString()}`}
-            // DÜZELTME: Kartın arka planı ve bordürü artık moda göre değişiyor
-            className="flex flex-col bg-white dark:bg-neutral-900 text-black dark:text-white p-5 rounded-2xl transition-all border border-gray-200 dark:border-white/10 hover:border-orange-500 hover:shadow-xl group"
+            className="flex flex-col bg-white dark:bg-neutral-900 text-black dark:text-white p-5 rounded-2xl transition-all border border-gray-200 dark:border-white/10 hover:border-orange-500 hover:shadow-xl group relative"
         >
             <div className="relative h-44 w-full rounded-xl overflow-hidden mb-4">
                 <CldImage
@@ -29,28 +71,22 @@ const PopularRouteCard = ({ route }: { route: any }) => {
                     gravity="auto"
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 />
-                {/* Etiket Rengi: Siyah yazı */}
-                <h1 className="text-5xl font-black text-black dark:text-white mb-3 flex items-center gap-3 italic uppercase tracking-tighter">
-  <Star size={36} className="text-orange-500 fill-orange-500" />
-  Popüler <span className="text-orange-500">Rotalar</span>
-</h1>
-
-
-
-
+                <button 
+                    onClick={handleSave}
+                    className="absolute top-3 right-3 z-10 p-2 bg-black/50 backdrop-blur-md rounded-full text-white hover:bg-orange-500 transition-all border border-white/10"
+                >
+                    <Heart size={18} className={isSaved ? "fill-white text-white" : "text-white"} />
+                </button>
             </div>
 
             <span className="text-xs font-bold text-orange-500 uppercase tracking-widest flex items-center gap-1 mb-2">
                 <MapPin size={14} /> {route.city}
             </span>
 
-            {/* Başlık Rengi: Light:Siyah / Dark:Beyaz */}
             <h4 className="text-xl font-black text-neutral-900 dark:text-neutral-100 mb-2 leading-tight group-hover:text-orange-400 transition-colors">
-
                 {route.title}
             </h4>
 
-            {/* Açıklama Rengi: Light:Koyu Gri / Dark:Açık Gri */}
             <p className="text-sm text-gray-700 dark:text-gray-400 mb-4 line-clamp-3">
                 {route.description}
             </p>
@@ -78,31 +114,19 @@ export default function PopularRoutesPage() {
 
     return (
         <div className="max-w-7xl mx-auto px-6 py-8 pt-24 min-h-screen bg-background transition-colors duration-300">
-
-
-            {/* GENEL SAYFA BAŞLIKLARI */}
             <h1 className="text-5xl font-black text-neutral-950 dark:text-neutral-100 mb-3 flex items-center gap-3 italic uppercase tracking-tighter">
-
                 <Star size={36} className="text-orange-500 fill-orange-500" />
                 Popüler <span className="text-orange-500">Rotalar</span>
             </h1>
             
             <p className="text-neutral-700 dark:text-neutral-400 text-lg mb-12 max-w-2xl">
-
                 Yapay zeka asistanımız tarafından en çok önerilen rotalar.
             </p>
 
             <section className="mb-20">
                 <h2 className="text-3xl font-black text-neutral-950 dark:text-neutral-100 mb-8 border-b border-orange-500/50 pb-2 flex items-center gap-3 uppercase italic">
-
-  <Map size={24} className="text-orange-500" /> İstanbul'un Ruhu
-</h2>
-
-
-
-
-
-
+                    <Map size={24} className="text-orange-500" /> İstanbul'un Ruhu
+                </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {istanbulRoutes.map(route => (
                         <PopularRouteCard key={route.id} route={route} />
@@ -112,12 +136,8 @@ export default function PopularRoutesPage() {
 
             <section>
                 <h2 className="text-3xl font-black text-neutral-950 dark:text-neutral-100 mb-8 border-b border-orange-500/50 pb-2 flex items-center gap-3 uppercase italic">
-
-  <Map size={24} className="text-orange-500" /> Ankara'nın Kalbi
-</h2>
-
-
-
+                    <Map size={24} className="text-orange-500" /> Ankara'nın Kalbi
+                </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {ankaraRoutes.map(route => (
                         <PopularRouteCard key={route.id} route={route} />

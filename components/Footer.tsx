@@ -27,12 +27,12 @@ export default function Footer() {
                             </Link>
                         </li>
                         <li>
-                            <Link href="#" className="hover:text-orange-500 transition-colors">
+                            <Link href="/privacy" className="hover:text-orange-500 transition-colors">
                                 Gizlilik Politikası
                             </Link>
                         </li>
                         <li>
-                            <Link href="#" className="hover:text-orange-500 transition-colors">
+                            <Link href="/contact" className="hover:text-orange-500 transition-colors">
                                 İletişim
                             </Link>
                         </li>

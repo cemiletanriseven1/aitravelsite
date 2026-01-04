@@ -196,14 +196,14 @@ const AboutPage = () => {
                             whileHover={{ scale: 1.1, rotate: 5 }}
                             transition={{ type: "spring", stiffness: 400, damping: 10 }}
                         >
-                            Geliştirici A
+                            Cemilenur Tanrıseven
                         </motion.div>
                         <motion.div
                             className="bg-neutral-100 dark:bg-neutral-800 w-32 h-32 rounded-full flex items-center justify-center text-neutral-500 dark:text-gray-400 text-sm border border-neutral-200 dark:border-white/10"
                             whileHover={{ scale: 1.1, rotate: -5 }}
                             transition={{ type: "spring", stiffness: 400, damping: 10 }}
                         >
-                            Geliştirici B
+                            Staj Sorumlusu
                         </motion.div>
                     </div>
                 </motion.section>

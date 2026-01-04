@@ -20,7 +20,7 @@ body {
 }
 html.light h1,
 html.light h2,
-html.light h3 {
+html.light h3{
   color: #000000 !important;
 }
 @media print {
