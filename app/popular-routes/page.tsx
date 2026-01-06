@@ -42,7 +42,7 @@ const PopularRouteCard = ({ route }: { route: any }) => {
                 description: route.description,
                 date: "Popüler Rota",
                 type: "popular", 
-                targetUrl: "/popular-routes" // ✅ POPÜLER SAYFASINA GİTSİN
+                targetUrl: "/popular-routes"
             };
             
             localStorage.setItem("saved_routes", JSON.stringify([...currentSaved, newSave]));
@@ -66,13 +66,15 @@ const PopularRouteCard = ({ route }: { route: any }) => {
                     width="600"
                     height="400"
                     src={route.image}
-                    alt={route.title}
+                    alt={`${route.title} görseli`}
                     crop="fill"
                     gravity="auto"
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 />
                 <button 
+                    type="button"
                     onClick={handleSave}
+                    aria-label={isSaved ? "Favorilerden Çıkar" : "Favorilere Ekle"}
                     className="absolute top-3 right-3 z-10 p-2 bg-black/50 backdrop-blur-md rounded-full text-white hover:bg-orange-500 transition-all border border-white/10"
                 >
                     <Heart size={18} className={isSaved ? "fill-white text-white" : "text-white"} />

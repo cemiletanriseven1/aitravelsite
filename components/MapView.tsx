@@ -2,6 +2,8 @@
 
 import React, { useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
+// Mapbox CSS importu eksikse harita düzgün görünmez, bunu ekledik:
+import "mapbox-gl/dist/mapbox-gl.css";
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN || "";
 
@@ -18,7 +20,7 @@ export default function MapView({ places, route }: { places: Place[]; route: Pla
 
     useEffect(() => {
         if (!containerRef.current) return;
-        if (mapRef.current) return; // sadece bir defa oluştur
+        if (mapRef.current) return;
 
         mapRef.current = new mapboxgl.Map({
             container: containerRef.current,
@@ -27,7 +29,6 @@ export default function MapView({ places, route }: { places: Place[]; route: Pla
             zoom: places.length ? 12 : 5,
         });
 
-        // kontrol ekle
         mapRef.current.addControl(new mapboxgl.NavigationControl(), "top-left");
 
         return () => {
@@ -36,16 +37,15 @@ export default function MapView({ places, route }: { places: Place[]; route: Pla
         };
     }, []);
 
-    // markerları ve rota güncelle
     useEffect(() => {
         const map = mapRef.current;
         if (!map) return;
 
-        // temizle önce
+        // Eski markerları temizle
         markersRef.current.forEach((m) => m.remove());
         markersRef.current = [];
 
-        // ekle markerlar
+        // Yeni markerları ekle
         places.forEach((p, idx) => {
             const el = document.createElement("div");
             el.style.width = "14px";
@@ -53,6 +53,7 @@ export default function MapView({ places, route }: { places: Place[]; route: Pla
             el.style.borderRadius = "50%";
             el.style.background = "#ff7a00";
             el.style.border = "2px solid white";
+            el.style.cursor = "pointer";
             el.title = p.name || `Nokta ${idx + 1}`;
 
             const marker = new mapboxgl.Marker({ element: el })
@@ -63,54 +64,63 @@ export default function MapView({ places, route }: { places: Place[]; route: Pla
             markersRef.current.push(marker);
         });
 
-        // rota çiz (simple line) - önce var olan source/layer sil
-        const routeCoords = (route || places).map((p) => [p.lng, p.lat]);
+        // Rota koordinatlarını hazırla
+        const routeCoords = (route && route.length > 0 ? route : places).map((p) => [p.lng, p.lat]);
 
+        // HATA ÇÖZÜMÜ: properties: {} eklendi
         if (map.getSource("route-line")) {
             (map.getSource("route-line") as mapboxgl.GeoJSONSource).setData({
                 type: "Feature",
-                geometry: { type: "LineString", coordinates: routeCoords },
+                properties: {}, // Kritik: TypeScript bunu bekler
+                geometry: { 
+                    type: "LineString", 
+                    coordinates: routeCoords as number[][] 
+                },
             });
         } else if (routeCoords.length > 1) {
             map.addSource("route-line", {
                 type: "geojson",
                 data: {
                     type: "Feature",
-                    geometry: { type: "LineString", coordinates: routeCoords },
+                    properties: {}, // Kritik: TypeScript bunu bekler
+                    geometry: {
+                        type: "LineString",
+                        coordinates: routeCoords as number[][],
+                    },
                 },
-            } as any);
+            });
 
             map.addLayer({
                 id: "route-line-layer",
                 type: "line",
                 source: "route-line",
                 layout: { "line-join": "round", "line-cap": "round" },
-                paint: { "line-color": "#ff7a00", "line-width": 4, "line-opacity": 0.85 },
+                paint: { 
+                    "line-color": "#ff7a00", 
+                    "line-width": 4, 
+                    "line-opacity": 0.85 
+                },
             });
         }
 
-        // haritayı rota ortalamasına kaydır
+        // Haritayı sığdır
         if (routeCoords.length) {
-            const lngs = routeCoords.map((c) => c[0]);
-            const lats = routeCoords.map((c) => c[1]);
-            const minLng = Math.min(...lngs);
-            const maxLng = Math.max(...lngs);
-            const minLat = Math.min(...lats);
-            const maxLat = Math.max(...lats);
-
-            const bounds = [
-                [minLng, minLat],
-                [maxLng, maxLat],
-            ] as [[number, number], [number, number]];
+            const bounds = new mapboxgl.LngLatBounds();
+            routeCoords.forEach((coord) => bounds.extend(coord as [number, number]));
 
             try {
                 map.fitBounds(bounds, { padding: 60, maxZoom: 15, duration: 500 });
             } catch (e) {
-                // ignore
+                console.error("Bounds error:", e);
             }
         }
 
     }, [places, route]);
 
-    return <div ref={containerRef} style={{ width: "100%", height: 480, borderRadius: 8, overflow: "hidden" }} />;
+    return (
+        <div 
+            ref={containerRef} 
+            className="w-full h-[480px] rounded-xl overflow-hidden shadow-inner border border-neutral-200 dark:border-white/10" 
+        />
+    );
 }
