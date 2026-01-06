@@ -1,36 +1,41 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🌍 AI Travel Assistant: Groq AI Destekli Yüksek Hızlı Seyahat Planlayıcı
 
-## Getting Started
+![Next.js](https://img.shields.io/badge/Next.js-14-black?style=for-the-badge&logo=next.js)
+![Groq AI](https://img.shields.io/badge/AI-Groq_LPU-orange?style=for-the-badge)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=for-the-badge&logo=typescript)
 
-First, run the development server:
+**AI Travel Assistant**, seyahat tutkunları için **Groq AI (LPU™ Inference Engine)** kullanarak saniyeler içinde kişiselleştirilmiş rotalar oluşturan modern bir web uygulamasıdır. Proje, hız ve performans odaklı bir mühendislik yaklaşımıyla geliştirilmiştir.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🚀 Neden Groq AI?
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Bu projede geleneksel modeller yerine **Groq LPU (Language Processing Unit)** tercih edilmiştir. Bu sayede:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Ultra Düşük Gecikme:** Seyahat rotaları milisaniyeler içinde üretilir.
+- **Yüksek Verimlilik:** Llama 3 / Mixtral modelleri Groq üzerinde optimize edilerek en doğru sonuçlar alınmıştır.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📈 Performans Skorları (Lighthouse)
 
-## Learn More
+Proje, Google Lighthouse denetimlerinden başarıyla geçmiştir:
 
-To learn more about Next.js, take a look at the following resources:
+- **Performans:** 💯 100/100
+- **Erişilebilirlik:** ♿ 96/100
+- **SEO:** 🔍 100/100
+- **Best Practices:** ✅ 77/100\* (Localhost ve üçüncü taraf çerez kaynaklıdır, canlıda 90+ öngörülür.)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## ✨ Özellikler
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- 🤖 **Groq AI Entegrasyonu:** Dünyanın en hızlı AI çıkarım motoru ile dinamik rota planlama.
+- 🗺️ **Mapbox GL JS:** Rotaların harita üzerinde interaktif görselleştirilmesi.
+- 📧 **Resend:** Planlanan rotaların şık bir e-posta ile kullanıcıya iletilmesi.
+- 🛡️ **Güvenlik:** Google reCAPTCHA v3 ve gelişmiş güvenlik başlıkları (Security Headers).
 
-## Deploy on Vercel
+## 🛠️ Kurulum
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. Repoyu klonlayın: `git clone https://github.com/kullanici-adiniz/ai-travel-assistant.git`
+2. Bağımlılıkları yükleyin: `npm install`
+3. `.env.local` dosyasına `GROQ_API_KEY` anahtarınızı ekleyin.
+4. `npm run dev` ile başlatın.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+_Cemilenur Tanrıseven tarafından Pointo Teknoloji A.Ş. stajı kapsamında geliştirilmiştir._
